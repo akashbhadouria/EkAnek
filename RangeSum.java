@@ -1,4 +1,7 @@
-import java.util.Scanner;
+import java.util.*;
+import java.lang.*;
+import java.io.*;
+
 class RangeSum
 {
     // Max tree size
@@ -6,12 +9,22 @@ class RangeSum
 
     static int BITree[] = new int[MAX];
 
+    /* n --> No. of elements present in input array.
+    BITree[0..n] --> Array that represents Binary
+                    Indexed Tree.
+    arr[0..n-1] --> Input array for which prefix sum
+                    is evaluated. */
+
+    // Returns sum of arr[0..index]. This function
+    // assumes that the array is preprocessed and
+    // partial sums of array elements are stored
+    // in BITree[].
     int getSum(int index)
     {
         int sum = 0; // Iniialize result
 
-//         index in BITree[] is 1 more than
-//         the index in arr[]
+        // index in BITree[] is 1 more than
+        // the index in arr[]
         index = index + 1;
 
         // Traverse ancestors of BITree[index]
@@ -26,39 +39,63 @@ class RangeSum
             index -= index & (-index);
         }
         return sum;
+    }
 
+//    // Updates a node in Binary Index Tree (BITree)
+//    // at given index in BITree. The given value
+//    // 'val' is added to BITree[i] and all of
+//    // its ancestors in tree.
+    public static void updateBIT(int n, int index,
+                                 int val) {
+        // index in BITree[] is 1 more than
+        // the index in arr[]
+        index = index + 1;
+
+        // Traverse all ancestors and add 'val'
+        while (index <= n) {
+            // Add 'val' to current node of BIT Tree
+            BITree[index] += val;
+
+            // Update index to that of parent
+            // in update View
+            index += index & (-index);
+        }
     }
 
     /* Function to construct fenwick tree
     from given array.*/
-    void AddInBIT(int arr[], int n)
-    {
-        // Initialize BITree[] as 0
-        for(int i=1; i<=n; i++)
-            BITree[i] = 0;
+            void constructBITree( int arr[], int n){
+                // Initialize BITree[] as 0
+                for (int i = 1; i <= n; i++)
+                    BITree[i] = 0;
+
+                // Store the actual values in BITree[]
+                // using update()
+                for (int i = 0; i < n; i++)
+                    updateBIT(n, i, arr[i]);
     }
 
-    // Main function
-    public static void main(String args[])
-    {
-        Scanner sc = new Scanner(System.in);
 
-        //We can also take generic array and take it's custom input
-        int arr[] = {2, 1, 1, 3, 2, 3,
-                4, 5, 6, 7, 8, 9};
-        int n = arr.length;
-        BinaryIndexedTree tree = new BinaryIndexedTree();
+            // Main function
+            public static void main (String args[])
+            {
+                Scanner sc = new Scanner(System.in);
+                int freq[] = {2, 1, 1, 3, 2, 3,
+                        4, 5, 6, 7, 8, 9};
+                int n = freq.length;
+                RangeSum tree = new RangeSum();
+                System.out.println("Enter the lower range for sum");
+                int LowerRange = sc.nextInt();
+                System.out.println("Enter the upper range for sum");
+                int UpperRange = sc.nextInt();
 
-        //Range from where to where we want to get the sum
-        System.out.println("Enter the upper range of index for finding the sum");
-        int UpperRange = sc.nextInt();
-        System.out.println("Enter the lower range of index for finding the sum");
-        int LowerRange = sc.nextInt();
-        // Build fenwick tree from given array
-        tree.constructBITree(arr, n);
-        int Sum = tree.getSum(UpperRange)- tree.getSum(LowerRange-1);
-        System.out.println("Sum of elements in arr  from range:"+LowerRange+" to "+ UpperRange+
-                " is "+ Sum);
+                // Build fenwick tree from given array
+                tree.constructBITree(freq, n);
+
+                int sum = tree.getSum(UpperRange) - tree.getSum(LowerRange - 1);
+
+                System.out.println("Sum of elements in arr" + " from " + LowerRange + " to " + UpperRange + " is " + sum);
+
+            }
 
     }
-}
