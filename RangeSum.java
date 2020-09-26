@@ -9,16 +9,6 @@ class RangeSum
 
     static int BITree[] = new int[MAX];
 
-    /* n --> No. of elements present in input array.
-    BITree[0..n] --> Array that represents Binary
-                    Indexed Tree.
-    arr[0..n-1] --> Input array for which prefix sum
-                    is evaluated. */
-
-    // Returns sum of arr[0..index]. This function
-    // assumes that the array is preprocessed and
-    // partial sums of array elements are stored
-    // in BITree[].
     int getSum(int index)
     {
         int sum = 0; // Iniialize result
@@ -41,10 +31,7 @@ class RangeSum
         return sum;
     }
 
-//    // Updates a node in Binary Index Tree (BITree)
-//    // at given index in BITree. The given value
-//    // 'val' is added to BITree[i] and all of
-//    // its ancestors in tree.
+
     public static void updateBIT(int n, int index,
                                  int val) {
         // index in BITree[] is 1 more than
